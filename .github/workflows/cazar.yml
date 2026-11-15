@@ -1,0 +1,38 @@
+name: Cazar VPS A1
+
+on:
+  schedule:
+    # Cada 5 minutos. GitHub puede retrasarlo unos minutos; es normal.
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: cazar-a1
+  cancel-in-progress: false
+
+jobs:
+  cazar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar SDK de OCI
+        run: pip install --quiet oci
+
+      - name: Cazar instancia ARM
+        env:
+          RUN_SECONDS: "270"
+          OCI_USER: ${{ secrets.OCI_USER }}
+          OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
+          OCI_TENANCY: ${{ secrets.OCI_TENANCY }}
+          OCI_KEY: ${{ secrets.OCI_KEY }}
+          OCI_SUBNET_ID: ${{ secrets.OCI_SUBNET_ID }}
+          OCI_COMPARTMENT_ID: ${{ secrets.OCI_COMPARTMENT_ID }}
+          SSH_PUB_KEY: ${{ secrets.SSH_PUB_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python cazar_vps_gh.py
