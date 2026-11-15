@@ -30,7 +30,7 @@ jobs:
 
       - name: Cazar instancia ARM
         env:
-          RUN_SECONDS: "480"
+          RUN_SECONDS: "280"
           OCI_USER: ${{ secrets.OCI_USER }}
           OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
           OCI_TENANCY: ${{ secrets.OCI_TENANCY }}
